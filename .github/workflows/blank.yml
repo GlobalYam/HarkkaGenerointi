@@ -34,6 +34,8 @@ jobs:
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
-          
+      - name: Run tests
+        run: poetry run coverage run --branch -m pytest
+        
       - name: Coverage report to Codecov
         run: bash <(curl -s https://codecov.io/bash)
