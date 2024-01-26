@@ -1,5 +1,5 @@
 # HarkkaGenerointi
-
+[![codecov](https://codecov.io/gh/GlobalYam/HarkkaGenerointi/graph/badge.svg?token=5C7OVJTKQE)](https://codecov.io/gh/GlobalYam/HarkkaGenerointi)
 ## Dokumentaatio:
 - [määrittelydokumentti](dokumentaatio\määrittelydocs.md)
 - 
