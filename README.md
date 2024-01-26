@@ -2,7 +2,7 @@
 [![codecov](https://codecov.io/gh/GlobalYam/HarkkaGenerointi/graph/badge.svg?token=5C7OVJTKQE)](https://codecov.io/gh/GlobalYam/HarkkaGenerointi)
 ## Dokumentaatio:
 - [määrittelydokumentti](dokumentaatio\määrittelydocs.md)
-- 
+- [rakennedokumentti](dokumentaatio\rakenne.md)
 
 ## Raportit:
 - [Raportti 1](dokumentaatio\raportit\raportti_1.md)
