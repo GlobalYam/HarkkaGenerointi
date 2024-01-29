@@ -1,5 +1,5 @@
 import unittest
-from logic.floor import Floor
+from logic.level import Level
 
 
 class TestFloor(unittest.TestCase):
@@ -10,7 +10,7 @@ class TestFloor(unittest.TestCase):
         height = 1
         width = 1
 
-        test_floor_plan = Floor(height, width)
+        test_floor_plan = Level(height, width)
         floor_as_text = str(test_floor_plan)
 
         self.assertEqual(floor_as_text, "[1.]\n")
@@ -19,7 +19,7 @@ class TestFloor(unittest.TestCase):
         height = 10
         width = 10
 
-        test_floor_plan = Floor(height, width)
+        test_floor_plan = Level(height, width)
 
         test_floor_plan.add_room((3, 3), 5, 5)
         floor_as_text = str(test_floor_plan)
