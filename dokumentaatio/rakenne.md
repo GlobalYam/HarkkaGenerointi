@@ -19,16 +19,10 @@ Tämän tuloksena output kuva muistuttaa input kuvaa lokaalisti sekä makrotasol
 Ohjelmani rakenne tukee myös osittain täytetyn output kuvan syöttämistä input kuvan kanssa, jolloin wavefunctioncollapse suoritetaan osittain täytetylle kuvalle.
 
 Esimerkki Kevin Chapelierin selainmallin toiminnasta:
+|   lähdekuva   | n=2 | n=3                                                                |
+| :-------: | :----- | :------------------------------------------------------------------ |
+| ![lähedekuva](https://github.com/GlobalYam/HarkkaGenerointi/blob/main/dokumentaatio/dokumentaatiokuvat/bricks_original.png)  | ![N=2](https://github.com/GlobalYam/HarkkaGenerointi/blob/main/dokumentaatio/dokumentaatiokuvat/bricks_2x2.png)    | ![N=3](https://github.com/GlobalYam/HarkkaGenerointi/blob/main/dokumentaatio/dokumentaatiokuvat/bricks_3x3.png)                           |
 
-![lähedekuva](https://github.com/GlobalYam/HarkkaGenerointi\dokumentaatio\dokumentaatiokuvat\bricks_original.png)
-
-N=2 muistuttaa tyypillisempää wavefunctioncollapse algoritmia:
-
-[N=2](dokumentaatio\dokumentaatiokuvat\bricks_2x2.png)
-
-
-N=3 huomattavasti tarkempi kuva, ja huomattavasti haastavmpi implementoida:
-
-[N=3](dokumentaatio\dokumentaatiokuvat\bricks_3x3.png) 
+N=2 muistuttaa tyypillisempää wavefunctioncollapse algoritmia, kun taas N=3 tuottaa huomattavasti vaikuttavamman tuloksen.
 
 *(Copyright (c) 2014 Kevin Chapelier under the MIT liscence)[https://github.com/kchapelier/wavefunctioncollapse?tab=MIT-1-ov-file#readme]
