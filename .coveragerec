@@ -1,0 +1,3 @@
+[run]
+omit = 
+    ui/*   # Exclude files in the 'ui' directory

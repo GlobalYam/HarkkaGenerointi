@@ -6,11 +6,11 @@ Tiistaina perehdyin syvemmin mahdollisiin algoritmeihin kuten dealuney algoritmi
 ettei kyseinen algoritmi soveltuisi omaa projektiani varten.
 
 ## aikataulu:
-| pv  | tuntimäärä | aihe                              |
-| --- | ---------- | --------------------------------- |
-| ma  | 1          | algoritien korjaamista            |
-| ti  | 1          | dealuney algoritmiin perehtyminen |
-| ke  | 1          | dokumentaatio                     |
-| to  |            |                                   |
-| pe  |            |                                   |
-| la  |            |                                   |
+| pv  | tuntimäärä | aihe                                   |
+| --- | ---------- | -------------------------------------- |
+| ma  | 1          | algoritien korjaamista                 |
+| ti  | 1          | dealuney algoritmiin perehtyminen      |
+| ke  | 1          | dokumentaatio                          |
+| to  | 2          | pygamen implementointi ja pohja wfclle |
+| pe  |            |                                        |
+| la  |            |                                        |
