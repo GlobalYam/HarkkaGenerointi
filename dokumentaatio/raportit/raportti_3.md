@@ -7,6 +7,12 @@ ettei kyseinen algoritmi soveltuisi omaa projektiani varten.
 keskiviikkona laajensin dokumentaatiota.
 Torstaina implementoin pygamen ja aloitin yksinkertaisen wfc:n implementaation. 
 (Tulen laajentamaan wfc:n toteutuksen tulevilla viikoilla!)
+Perjantaina toteutin wavefunctioncollapse algoritmia, sillä halusin viikon osalta etenemistä projektiin.
+Toteutuksessani on tällähetkellä useita puutteita, joista kenties suurin on testaamisen puute.
+Päämääräni seuraavalle viikolle on laajentaa testejä ja parantaa koodin laatua.
+Tulen uusimaan varmasti suuren osan tekemästäni työstä, mutta tekemäni työ tutustutti minut paljon läheisemmin wfc algoritmiin ja sen haasteisiin.
+
+Perjantain loppupuolella en ollut tyytyväinen koodin laatuun, mutta päämäärä olisi parantaa sitä seuraavalla viikolla
 
 ## aikataulu:
 | pv  | tuntimäärä | aihe                                   |
@@ -15,5 +21,5 @@ Torstaina implementoin pygamen ja aloitin yksinkertaisen wfc:n implementaation.
 | ti  | 1          | dealuney algoritmiin perehtyminen      |
 | ke  | 1          | dokumentaatio                          |
 | to  | 2          | pygamen implementointi ja pohja wfclle |
-| pe  |            |                                        |
+| pe  | 5          | wavefunctioncollapse implementaatio    |
 | la  |            |                                        |

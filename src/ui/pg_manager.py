@@ -1,6 +1,6 @@
 import numpy as np
 import pygame as pg
-
+import sys
 
 class PygameManager:
     """Luokka joka vastaa pygamen hallinnasta"""
@@ -9,26 +9,61 @@ class PygameManager:
         "alustaa managerin näytön"
         self.screen_w, self.screen_h = shape
         self.screen = pg.display.set_mode((self.screen_w, self.screen_h))
+        self.screen_updated = True
+
+    def update_screen(self, grid):
+        if self.screen_updated == True:
+            self.screen_updated = False
+            self.draw_screen_from_grid(grid)
+
 
     def draw_screen_from_grid(self, grid):
         """Funktio joka piirtää näytölle annetun gridin"""
         # Clear the screen
         self.screen.fill((0, 0, 0))
         height, width = grid.shape
-        self.cell_size = min(self.screen_h // height, self.screen_w // width)
+        cell_size = min(self.screen_h // height, self.screen_w // width)
 
         # Draw grid and colored squares
         for y, row in enumerate(grid):
             for x, number in enumerate(row):
-                screen_y = self.cell_size * y
-                screen_x = self.cell_size * x
+                screen_y = cell_size * y
+                screen_x = cell_size * x
 
                 pg.draw.rect(
                     self.screen,
                     (number * 30, number * 30, number * 30),
-                    (screen_x, screen_y, self.cell_size, self.cell_size),
+                    (screen_x, screen_y, cell_size, cell_size),
                 )
         pg.display.flip()
 
-        def get_input(self):
-            return [event for event in pg.event.get()]
+    def get_input(self, wfc_manager):
+        for event in pg.event.get():
+            # QUIT
+            if event.type == pg.QUIT:
+                sys.exit()
+            if event.type == pg.KEYDOWN:
+                match event.key:
+                    case pg.K_q:
+                        # QUIT
+                        sys.exit()
+                    
+                    case pg.K_u:
+                        # päivitä ruutu manuaalisesti
+                        self.screen_updated = True
+
+                    case pg.K_e:
+                        # visualisoi entropia
+                        self.draw_screen_from_grid(wfc_manager.entropy)
+                    
+                    case pg.K_c:
+                        # collapse entropy
+                        print('collapse wave')
+                        wfc_manager.step()
+                        self.screen_updated = True
+                    
+                    
+                    
+
+
+                        

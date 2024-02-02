@@ -18,14 +18,27 @@ adjacency_rules = [
 ]
 
 test_level = Level(15, 15)
-game_manager = PygameManager((SCREEN_W, SCREEN_H))
-wfc_manager = swfc(test_level.grid, adjacency_rules)
 
+wfc_manager = swfc(test_level.grid, adjacency_rules, test_level)
+game_manager = PygameManager((SCREEN_W, SCREEN_H))
 print(test_level)
 
 test_level.add_floor((2, 2), 5, 5)
 test_level.add_floor((9, 3), 4, 4)
 test_level.add_floor((6, 10), 3, 4)
+
+wfc_manager.level_entropy()
+
+# for y, row in enumerate(wfc_manager.neighbours):
+#     for x, neighbours_at_xy in enumerate(row):
+#         if neighbours_at_xy != [0, 0, 0, 0, 0] and test_level.grid[y,x] == 0 and wfc_manager.entropy[y,x] == 5:
+#             print(f'outliers (x,y):{x,y} {neighbours_at_xy}, entropy: {wfc_manager.entropy[y,x]}' )
+
+# print(f'12, 7: {wfc_manager.neighbours[7][12]}, entropy: {wfc_manager.entropy[7,12]}' )
+# print(f'11, 7: {wfc_manager.neighbours[7][11]}, entropy: {wfc_manager.entropy[7,11]}' )
+# print(f'10, 7: {wfc_manager.neighbours[7][10]}, entropy: {wfc_manager.entropy[7,10]}' )
+# print(f'9, 7: {wfc_manager.neighbours[7][9]}, entropy: {wfc_manager.entropy[7,9]}' )
+
 
 print(test_level)
 running = True
@@ -34,5 +47,5 @@ while running:
         if event.type == pg.QUIT:
             running = False
 
-    game_manager.draw_screen_from_grid(test_level.grid)
-    # game_manager.get_input()
+    game_manager.update_screen(test_level.grid)
+    game_manager.get_input(wfc_manager)
