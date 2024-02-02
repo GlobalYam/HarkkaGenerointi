@@ -5,7 +5,7 @@ import pygame as pg
 class PygameManager:
     """Luokka joka vastaa pygamen hallinnasta"""
 
-    def __init__(self, shape):
+    def __init__(self, shape) -> None:
         "alustaa managerin näytön"
         self.screen_w, self.screen_h = shape
         self.screen = pg.display.set_mode((self.screen_w, self.screen_h))

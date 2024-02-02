@@ -4,6 +4,9 @@ Aloitin viikon työt maanantaina korjaamalla pieniä virheitä algoritmeista ja 
 Alustin myös funktioita polunluontialgoritmia varten.
 Tiistaina perehdyin syvemmin mahdollisiin algoritmeihin kuten dealuney algoritmiin, mutta nopeasti vaikutti tulevan selväksi, 
 ettei kyseinen algoritmi soveltuisi omaa projektiani varten.
+keskiviikkona laajensin dokumentaatiota.
+Torstaina implementoin pygamen ja aloitin yksinkertaisen wfc:n implementaation. 
+(Tulen laajentamaan wfc:n toteutuksen tulevilla viikoilla!)
 
 ## aikataulu:
 | pv  | tuntimäärä | aihe                                   |

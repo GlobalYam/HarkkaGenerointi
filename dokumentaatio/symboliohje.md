@@ -9,9 +9,9 @@ Eli funktion tulisi ottaa syötteeksi pari naapuruussääntöjä ja osittain tä
 
 Oletusasetuksilla numerot kuitenkin kuvaavat seuraavia stuktuureja videopelityylisessä tasossa:
 
-0: Tyhjä tile.
-1: Seinä.
-2: Lattia.
-3. Käytävä.
-4. Ovi.
-5. Kallio.
+0: Tyhjä tile. 
+1: Seinä.      2,2,1,2,2
+2: Lattia.     2,4,0,0,0
+1. Käytävä.    2,0,2,2,0
+2. Ovi.        2,1,1,0,0
+3. Kallio.     3,0,0,0,4
