@@ -26,6 +26,7 @@ print(test_level)
 test_level.add_floor((2, 2), 5, 5)
 test_level.add_floor((9, 3), 4, 4)
 test_level.add_floor((6, 10), 3, 4)
+test_level.grid[7, 5] = 4
 
 wfc_manager.level_entropy()
 

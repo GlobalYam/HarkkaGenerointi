@@ -29,6 +29,11 @@ class SimpleWavefuntioncollapse:
 
         for y, row in enumerate(self.grid):
             for x, value in enumerate(row):
+                if value != 0:
+                    self.rule_out_neighbours((x, y), int(value))
+
+        for y, row in enumerate(self.grid):
+            for x, value in enumerate(row):
                 if value == 0:
                     self.tile_entropy((x, y))
 
@@ -38,16 +43,21 @@ class SimpleWavefuntioncollapse:
         """Funktio joka laskee entropian yhdelle laatalle"""
         x, y = coordinates
         neighbour_data = self.neighbours[y][x]
+        if self.grid[y, x] != 0:
+            return False
         for tile, rule in enumerate(self.adjacency_rules):
             for neighbor_tile, allowed_number_of_tile in enumerate(rule):
                 if int(neighbour_data[neighbor_tile]) > int(allowed_number_of_tile):
+                    if (x, y) == (6, 9):
+                        print(neighbor_tile)
                     self.allowed_options[y][x][int(tile)] = False
+
         self.entropy[y, x] = sum(
             [1 for allowed in self.allowed_options[y][x] if allowed is True]
         )
         return self.entropy[y, x]
 
-    def propagate(self, coordinates, value, update_entropy=True, repropagate=False):
+    def propagate(self, coordinates, value, update_entropy=True):
         """päivitä ympäröivien solujen entropia"""
         value = int(value)
         x, y = coordinates
@@ -76,29 +86,54 @@ class SimpleWavefuntioncollapse:
 
             for neighbor in valid_neighbors:
                 xx, yy = neighbor
-                if repropagate:
-                    print(xx)
-                    self.neighbours[yy][xx][value - 1] += 1
+                new_value = int(self.grid[yy, xx])
+                self.neighbours[yy][xx][value - 1] += 1
                 # päivitä entropia, lähes aina käytössä, ellei aluesteta
                 if update_entropy is True:
-                    new_value = self.grid[yy, xx]
-                    if new_value == 0:
-                        self.tile_entropy((xx, yy))
-                    elif repropagate:
-                        self.propagate((xx, yy), new_value, True, False)
+                    self.tile_entropy((xx, yy))
 
-            print(x, y)
-            print(len(self.neighbours))
+    def rule_out_neighbours(self, coordinates, value):
+        value = int(value)
+        x, y = coordinates
+
+        if 0 <= y < self.height and 0 <= x < self.width and value != 0:
+            # etsi naapurien kordinaatit
+            neighbors = [
+                (x - 1, y),
+                (x, y - 1),
+                (x, y + 1),
+                (x + 1, y),
+            ]
+            angle_neighbors = [
+                (x + 1, y + 1),
+                (x - 1, y - 1),
+                (x - 1, y + 1),
+                (x + 1, y - 1),
+            ]
+
+            # Filter out neighbors that are outside the boundaries
+            valid_neighbors = [
+                (xx, yy)
+                for xx, yy in neighbors
+                if 0 <= yy < self.height - 1 and 0 <= xx < self.width - 1
+            ]
             # katso omat vierekkäisyys säännöt ja vähennä naapurien sallittujen valintojen määrää.
             neighbour_data = self.neighbours[y][x]
-            for neighbor_tile, allowed_number_of_tile in enumerate(
+            # print(neighbour_data)
+
+            if (x, y) == (6, 9):
+                print(f"6,9 neigbours: {neighbour_data}")
+            for evaluated_tile, allowed_number_of_tile in enumerate(
                 self.adjacency_rules[value - 1]
             ):
-                if int(neighbour_data[neighbor_tile]) == int(allowed_number_of_tile):
+                if int(neighbour_data[evaluated_tile]) == int(allowed_number_of_tile):
+                    print(f"x:{x} y:{y} not allowing neighbor: {evaluated_tile+1}")
+                    print(neighbour_data)
+                    print()
                     # kiellä kaikilta naapureilta kyseinen tile
                     for neighbor in valid_neighbors:
                         xx, yy = neighbor
-                        self.allowed_options[yy][xx][int(neighbor_tile)] = False
+                        self.allowed_options[yy][xx][int(evaluated_tile)] = False
 
     def step(self):
         """etsi matalin entropia, romahduta aalto matalimman entropian pisteessä, ja päivitä entropia"""
@@ -134,13 +169,14 @@ class SimpleWavefuntioncollapse:
                 if allowed is True
             ]
         )
+        if tile_options:
+            new_tile = int(random.choice(tile_options))
 
-        new_tile = random.choice(tile_options)
+            self.grid[y, x] = new_tile
+            print(self.level_manager.grid)
 
-        self.grid[y, x] = new_tile
-        print(self.level_manager.grid)
+            self.entropy[y, x] = 0
 
-        self.entropy[y, x] = 0
-
-        # päivitetään naapurien tiedot
-        self.propagate((x, y), int(new_tile), True, True)
+            # päivitetään naapurien tiedot
+            self.propagate((x, y), new_tile)
+            self.rule_out_neighbours((x, y), new_tile)

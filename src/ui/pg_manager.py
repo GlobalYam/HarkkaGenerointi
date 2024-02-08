@@ -2,6 +2,7 @@ import numpy as np
 import pygame as pg
 import sys
 
+
 class PygameManager:
     """Luokka joka vastaa pygamen hallinnasta"""
 
@@ -16,13 +17,14 @@ class PygameManager:
             self.screen_updated = False
             self.draw_screen_from_grid(grid)
 
-
     def draw_screen_from_grid(self, grid):
         """Funktio joka piirtää näytölle annetun gridin"""
         # Clear the screen
         self.screen.fill((0, 0, 0))
         height, width = grid.shape
         cell_size = min(self.screen_h // height, self.screen_w // width)
+
+        font = pg.font.Font(None, int(cell_size * 0.8))
 
         # Draw grid and colored squares
         for y, row in enumerate(grid):
@@ -35,6 +37,11 @@ class PygameManager:
                     (number * 30, number * 30, number * 30),
                     (screen_x, screen_y, cell_size, cell_size),
                 )
+                text = font.render(str(int(number)), True, (255, 255, 255))
+                text_rect = text.get_rect(
+                    center=(screen_x + cell_size // 2, screen_y + cell_size // 2)
+                )
+                self.screen.blit(text, text_rect)
         pg.display.flip()
 
     def get_input(self, wfc_manager):
@@ -47,7 +54,7 @@ class PygameManager:
                     case pg.K_q:
                         # QUIT
                         sys.exit()
-                    
+
                     case pg.K_u:
                         # päivitä ruutu manuaalisesti
                         self.screen_updated = True
@@ -55,15 +62,9 @@ class PygameManager:
                     case pg.K_e:
                         # visualisoi entropia
                         self.draw_screen_from_grid(wfc_manager.entropy)
-                    
+
                     case pg.K_c:
                         # collapse entropy
-                        print('collapse wave')
+                        print("collapse wave")
                         wfc_manager.step()
                         self.screen_updated = True
-                    
-                    
-                    
-
-
-                        
