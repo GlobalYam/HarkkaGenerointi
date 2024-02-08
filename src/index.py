@@ -9,26 +9,38 @@ pg.init()
 SCREEN_W = (pg.display.Info().current_w) // 2
 SCREEN_H = (pg.display.Info().current_h) // 2
 
+# adjacency_rules = [
+#     [3, 4, 1, 2, 2],
+#     [3, 4, 0, 1, 0],
+#     [2, 0, 2, 2, 0],
+#     [2, 1, 1, 0, 0],
+#     [4, 0, 0, 0, 4],
+# ]
 adjacency_rules = [
-    [2, 2, 1, 2, 2],
-    [2, 4, 0, 2, 0],
-    [2, 0, 2, 2, 0],
-    [2, 1, 1, 0, 0],
+    [3, 4, 2, 2, 3],
+    [3, 4, 2, 1, 0],
+    [2, 1, 2, 0, 0],
+    [0, 0, 0, 0, 0],
     [4, 0, 0, 0, 4],
 ]
 
-test_level = Level(15, 15)
+
+test_level = Level(25, 25)
 
 wfc_manager = swfc(test_level.grid, adjacency_rules, test_level)
 game_manager = PygameManager((SCREEN_W, SCREEN_H))
 print(test_level)
 
 test_level.add_floor((2, 2), 5, 5)
-test_level.add_floor((9, 3), 4, 4)
+test_level.add_floor((10, 3), 4, 3)
 test_level.add_floor((6, 10), 3, 4)
-test_level.grid[7, 5] = 4
+test_level.grid[7, 5] = 3
 
-wfc_manager.level_entropy()
+test_level.grid[10, 2] = 1
+test_level.grid[10, 3] = 1
+test_level.grid[10, 4] = 1
+
+wfc_manager.initial_setup()
 
 # for y, row in enumerate(wfc_manager.neighbours):
 #     for x, neighbours_at_xy in enumerate(row):
@@ -49,4 +61,4 @@ while running:
             running = False
 
     game_manager.update_screen(test_level.grid)
-    game_manager.get_input(wfc_manager)
+    game_manager.get_input(wfc_manager, test_level)

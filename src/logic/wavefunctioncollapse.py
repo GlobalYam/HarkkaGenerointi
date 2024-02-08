@@ -20,7 +20,7 @@ class SimpleWavefuntioncollapse:
 
         self.level_manager = level_manager
 
-    def level_entropy(self):
+    def initial_setup(self):
         """Funktio joka laskee entropian koko tasolle"""
         for y, row in enumerate(self.grid):
             for x, value in enumerate(row):
@@ -32,24 +32,29 @@ class SimpleWavefuntioncollapse:
                 if value != 0:
                     self.rule_out_neighbours((x, y), int(value))
 
+        self.level_entropy()
+
+        # print(f'self.entropy:\n {self.entropy}')
+
+    def level_entropy(self):
         for y, row in enumerate(self.grid):
             for x, value in enumerate(row):
                 if value == 0:
                     self.tile_entropy((x, y))
-
-        # print(f'self.entropy:\n {self.entropy}')
-
+        
     def tile_entropy(self, coordinates):
         """Funktio joka laskee entropian yhdelle laatalle"""
         x, y = coordinates
         neighbour_data = self.neighbours[y][x]
+        if (x, y) == (5, 8):
+            print(f'5,8 options: {self.allowed_options[y][x]}')
         if self.grid[y, x] != 0:
-            return False
+            self.entropy[y, x] = 0
+            return 0
         for tile, rule in enumerate(self.adjacency_rules):
             for neighbor_tile, allowed_number_of_tile in enumerate(rule):
                 if int(neighbour_data[neighbor_tile]) > int(allowed_number_of_tile):
-                    if (x, y) == (6, 9):
-                        print(neighbor_tile)
+                    
                     self.allowed_options[y][x][int(tile)] = False
 
         self.entropy[y, x] = sum(
@@ -61,68 +66,29 @@ class SimpleWavefuntioncollapse:
         """päivitä ympäröivien solujen entropia"""
         value = int(value)
         x, y = coordinates
+        
+        valid_neighbors = self.get_valid_neighbors(coordinates)
 
-        if 0 <= y < self.height and 0 <= x < self.width and value != 0:
-            # etsi naapurien kordinaatit
-            neighbors = [
-                (x - 1, y),
-                (x, y - 1),
-                (x, y + 1),
-                (x + 1, y),
-            ]
-            angle_neighbors = [
-                (x + 1, y + 1),
-                (x - 1, y - 1),
-                (x - 1, y + 1),
-                (x + 1, y - 1),
-            ]
-
-            # Filter out neighbors that are outside the boundaries
-            valid_neighbors = [
-                (xx, yy)
-                for xx, yy in neighbors
-                if 0 <= yy < self.height - 1 and 0 <= xx < self.width - 1
-            ]
-
+        if valid_neighbors and value != 0:
             for neighbor in valid_neighbors:
                 xx, yy = neighbor
                 new_value = int(self.grid[yy, xx])
                 self.neighbours[yy][xx][value - 1] += 1
                 # päivitä entropia, lähes aina käytössä, ellei aluesteta
                 if update_entropy is True:
+                    self.rule_out_neighbours((xx, yy), new_value)
                     self.tile_entropy((xx, yy))
 
     def rule_out_neighbours(self, coordinates, value):
         value = int(value)
         x, y = coordinates
-
-        if 0 <= y < self.height and 0 <= x < self.width and value != 0:
-            # etsi naapurien kordinaatit
-            neighbors = [
-                (x - 1, y),
-                (x, y - 1),
-                (x, y + 1),
-                (x + 1, y),
-            ]
-            angle_neighbors = [
-                (x + 1, y + 1),
-                (x - 1, y - 1),
-                (x - 1, y + 1),
-                (x + 1, y - 1),
-            ]
-
-            # Filter out neighbors that are outside the boundaries
-            valid_neighbors = [
-                (xx, yy)
-                for xx, yy in neighbors
-                if 0 <= yy < self.height - 1 and 0 <= xx < self.width - 1
-            ]
+        
+        valid_neighbors = self.get_valid_neighbors(coordinates)
+        if valid_neighbors and value != 0:
             # katso omat vierekkäisyys säännöt ja vähennä naapurien sallittujen valintojen määrää.
             neighbour_data = self.neighbours[y][x]
             # print(neighbour_data)
 
-            if (x, y) == (6, 9):
-                print(f"6,9 neigbours: {neighbour_data}")
             for evaluated_tile, allowed_number_of_tile in enumerate(
                 self.adjacency_rules[value - 1]
             ):
@@ -134,6 +100,37 @@ class SimpleWavefuntioncollapse:
                     for neighbor in valid_neighbors:
                         xx, yy = neighbor
                         self.allowed_options[yy][xx][int(evaluated_tile)] = False
+                        print(self.allowed_options[yy][xx])
+
+    def get_valid_neighbors(self, coordinates):
+        x, y = coordinates
+
+        if 0 <= y < self.height and 0 <= x < self.width:
+            # etsi naapurien kordinaatit
+            neighbors = [
+                (x - 1, y),
+                (x, y - 1),
+                (x, y + 1),
+                (x + 1, y),
+            ]
+            angle_neighbors = [
+                (x + 1, y + 1),
+                (x - 1, y - 1),
+                (x - 1, y + 1),
+                (x + 1, y - 1),
+            ]
+
+            # Filter out neighbors that are outside the boundaries
+            valid_neighbors = [
+                (xx, yy)
+                for xx, yy in neighbors
+                if 0 <= yy < self.height  and 0 <= xx < self.width
+            ]
+            return valid_neighbors
+        else:
+            return False
+        
+        
 
     def step(self):
         """etsi matalin entropia, romahduta aalto matalimman entropian pisteessä, ja päivitä entropia"""
@@ -141,8 +138,12 @@ class SimpleWavefuntioncollapse:
         if coordinate_list:
             tile = random.choice(coordinate_list)
             self.collapse_wave_at(tile)
+            # tämä on hieman tehotonta, optimoidaan myöhemmin
+            for neighbor in self.get_valid_neighbors(tile):
+                self.tile_entropy(neighbor)
+            return True
         else:
-            print("all possible tiles collapsed")
+            return False
 
     def find_lowest_entropy(self):
         """funktio joka etsii gridistä matalimman entropian"""
@@ -178,5 +179,5 @@ class SimpleWavefuntioncollapse:
             self.entropy[y, x] = 0
 
             # päivitetään naapurien tiedot
-            self.propagate((x, y), new_tile)
+            self.propagate((x, y), new_tile, True)
             self.rule_out_neighbours((x, y), new_tile)

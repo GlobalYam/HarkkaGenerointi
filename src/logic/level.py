@@ -9,13 +9,18 @@ class Level:
         self.width = width
 
         # Alustaa tyhjän numpy arrayn nollilla halutussa muodossa
-        self.grid = np.zeros((height, width))
+        self.initialize_level()
 
-        # reunusta xkkösllä
-        self.grid[0, :] = 1  # ylä
-        self.grid[-1, :] = 1  # ala
-        self.grid[:, 0] = 1  # vasen
-        self.grid[:, -1] = 1  # oieka
+    def initialize_level(self,):
+        # Alustaa tyhjän numpy arrayn nollilla halutussa muodossa
+        self.grid = np.zeros((self.height, self.width))
+        # reunusta laatoilla
+        tile = 5
+
+        self.grid[0, :] = tile  # ylä
+        self.grid[-1, :] = tile  # ala
+        self.grid[:, 0] = tile  # vasen
+        self.grid[:, -1] = tile  # oieka
 
     def add_room(self, coordinates, height, width):
         """Funktio joka asettaa huoneen annettuihin kordinaatteihin jos se on sallittua"""

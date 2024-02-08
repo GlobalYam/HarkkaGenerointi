@@ -44,7 +44,7 @@ class PygameManager:
                 self.screen.blit(text, text_rect)
         pg.display.flip()
 
-    def get_input(self, wfc_manager):
+    def get_input(self, wfc_manager, level_manager):
         for event in pg.event.get():
             # QUIT
             if event.type == pg.QUIT:
@@ -56,7 +56,7 @@ class PygameManager:
                         sys.exit()
 
                     case pg.K_u:
-                        # päivitä ruutu manuaalisesti
+                        # päivitä näyttö manuaalisesti
                         self.screen_updated = True
 
                     case pg.K_e:
@@ -68,3 +68,22 @@ class PygameManager:
                         print("collapse wave")
                         wfc_manager.step()
                         self.screen_updated = True
+                    
+                    case pg.K_w:
+                        # uudelleen laske tason entropioa (debug käyttöön)
+                        wfc_manager.level_entropy()
+                        self.draw_screen_from_grid(wfc_manager.entropy)
+                    
+                    case pg.K_a:
+                        # autocomplete - toteuta step wfclle kunnes valmis
+                        repeat = True
+                        while repeat:
+                            repeat = wfc_manager.step()
+                            self.screen_updated = True
+                            # self.update_screen(level_manager.grid)
+                    
+                    case pg.K_r:
+                        # resetoi taso
+                        pass
+
+

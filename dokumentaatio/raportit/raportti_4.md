@@ -2,7 +2,10 @@
 
 maanantaina osallistuin ryhmään ja tein pieniä korjauksia ohjelmaani
 
-torstaina aloin korjaamaan wfc algoritmia, mutta kohtasin useita ongelmia, työskentely ei ollut produktiivista.
+torstaina aloin korjaamaan wfc algoritmia, mutta kohtasin useita ongelmia, työskentely ei ollut produktiivista päivällä.
+Torstai-illalla sain pienen lovon jälkeen kuitenkin ohjalman edistettyä erittäin hyvään pisteeseen.
+Wfcn suurimmat ongelmat ovat nyt korjattu ja olen valmis aloittamaan käyttöohjeen ja testaamisen laajentamisen.
+
 ## aikataulu:
 | pv  | tuntimäärä | aihe                                  |
 | --- | ---------- | ------------------------------------- |
