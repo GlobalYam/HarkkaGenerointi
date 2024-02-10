@@ -1,21 +1,52 @@
 import numpy as np
 import pygame as pg
 import sys
+import random
+from logic.level import Level
+from logic.wavefunctioncollapse import SimpleWavefuntioncollapse as swfc
 
 
 class PygameManager:
     """Luokka joka vastaa pygamen hallinnasta"""
 
-    def __init__(self, shape) -> None:
+    def __init__(self, shape, adjacency_rules) -> None:
         "alustaa managerin näytön"
         self.screen_w, self.screen_h = shape
         self.screen = pg.display.set_mode((self.screen_w, self.screen_h))
-        self.screen_updated = True
+        self.adjacency_rules = adjacency_rules
 
-    def update_screen(self, grid):
-        if self.screen_updated == True:
+        self.screen_updated = True
+        self.repeat = False
+        
+        self.reset()
+
+    def reset(self):
+        self.my_level = self.set_level((25, 25), 6, (3, 8))
+
+        self.wfc_manager = swfc(self.my_level.grid, self.adjacency_rules, self.my_level)
+        self.wfc_manager.initial_setup()
+
+    def set_level(self, level_size, room_count, room_size_range):
+
+        level_width, level_height = level_size
+        min_room, max_room = room_size_range
+
+        level = Level(level_width, level_height)
+
+        for i in range(room_count):
+            room_width = random.randrange(min_room, max_room)
+            room_height = random.randrange(min_room, max_room)
+            x = random.randrange(1, level_width - room_width - 2)
+            y = random.randrange(1, level_height - room_height - 2)
+            level.add_floor((x,y), room_height, room_width)
+        
+        return level
+
+    def update_screen(self):
+        """päivittää näytön"""
+        if self.screen_updated is True:
             self.screen_updated = False
-            self.draw_screen_from_grid(grid)
+            self.draw_screen_from_grid(self.my_level.grid)
 
     def draw_screen_from_grid(self, grid):
         """Funktio joka piirtää näytölle annetun gridin"""
@@ -44,7 +75,18 @@ class PygameManager:
                 self.screen.blit(text, text_rect)
         pg.display.flip()
 
-    def get_input(self, wfc_manager, level_manager):
+    def get_input(self):
+
+        #repeat the process
+        if self.repeat:
+            self.repeat = self.wfc_manager.step()
+            self.screen_updated = True
+            # harvoissa tilanteissa, entropiaa tulee pävittää globaalisti että konfilkti ratkeaa 
+            if self.repeat is False:
+                self.wfc_manager.level_entropy()
+                self.repeat = self.wfc_manager.step()
+
+
         for event in pg.event.get():
             # QUIT
             if event.type == pg.QUIT:
@@ -61,29 +103,28 @@ class PygameManager:
 
                     case pg.K_e:
                         # visualisoi entropia
-                        self.draw_screen_from_grid(wfc_manager.entropy)
+                        self.draw_screen_from_grid(self.wfc_manager.entropy)
 
                     case pg.K_c:
                         # collapse entropy
                         print("collapse wave")
-                        wfc_manager.step()
+                        self.wfc_manager.step()
                         self.screen_updated = True
                     
                     case pg.K_w:
                         # uudelleen laske tason entropioa (debug käyttöön)
-                        wfc_manager.level_entropy()
-                        self.draw_screen_from_grid(wfc_manager.entropy)
+                        self.wfc_manager.level_entropy()
+                        self.draw_screen_from_grid(self.wfc_manager.entropy)
                     
                     case pg.K_a:
                         # autocomplete - toteuta step wfclle kunnes valmis
-                        repeat = True
-                        while repeat:
-                            repeat = wfc_manager.step()
-                            self.screen_updated = True
+                        self.repeat = True
                             # self.update_screen(level_manager.grid)
                     
                     case pg.K_r:
                         # resetoi taso
-                        pass
+                        self.reset()
+                        self.screen_updated = True
+
 
 

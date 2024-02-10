@@ -10,10 +10,10 @@ class SimpleWavefuntioncollapse:
         self.width, self.height = grid.shape
         self.entropy = np.zeros((self.height, self.width))
         self.neighbours = [
-            [[0, 0, 0, 0, 0] for x in range(self.width)] for y in range(self.height)
+            [[0, 0, 0, 0] for x in range(self.width)] for y in range(self.height)
         ]
         self.allowed_options = [
-            [[True, True, True, True, True] for x in range(self.width)]
+            [[True, True, True, True] for x in range(self.width)]
             for y in range(self.height)
         ]
         self.adjacency_rules = adjacency_rules
@@ -73,6 +73,7 @@ class SimpleWavefuntioncollapse:
             for neighbor in valid_neighbors:
                 xx, yy = neighbor
                 new_value = int(self.grid[yy, xx])
+                print(value)
                 self.neighbours[yy][xx][value - 1] += 1
                 # päivitä entropia, lähes aina käytössä, ellei aluesteta
                 if update_entropy is True:
@@ -174,7 +175,6 @@ class SimpleWavefuntioncollapse:
             new_tile = int(random.choice(tile_options))
 
             self.grid[y, x] = new_tile
-            print(self.level_manager.grid)
 
             self.entropy[y, x] = 0
 

@@ -15,7 +15,7 @@ class Level:
         # Alustaa tyhjän numpy arrayn nollilla halutussa muodossa
         self.grid = np.zeros((self.height, self.width))
         # reunusta laatoilla
-        tile = 5
+        tile = 1
 
         self.grid[0, :] = tile  # ylä
         self.grid[-1, :] = tile  # ala
@@ -33,13 +33,13 @@ class Level:
             and np.all(self.grid[y : y + height, x : x + width] == 0)
         ):
             # Rakenna huone
-            self.grid[y, x : x + width] = 1  # Yläseinä
-            self.grid[y + height - 1, x : x + width] = 1  # Pohjaseinä
-            self.grid[y : y + height, x] = 1  # Vasenseinä
-            self.grid[y : y + height, x + width - 1] = 1  # Oikeaseinä
+            self.grid[y, x : x + width] = 2  # Yläseinä
+            self.grid[y + height - 1, x : x + width] = 2  # Pohjaseinä
+            self.grid[y : y + height, x] = 2  # Vasen seinä
+            self.grid[y : y + height, x + width - 1] = 2  # Oikea seinä
 
             # Täytä huone lattialla
-            self.grid[y + 1 : y + height - 1, x + 1 : x + width - 1] = 2
+            self.grid[y + 1 : y + height - 1, x + 1 : x + width - 1] = 3
 
             print("Huone rakennettu")
             return True
@@ -56,9 +56,10 @@ class Level:
             0 < y < self.height - height
             and 0 < x < self.width - width
             and np.all(self.grid[y : y + height, x : x + width] != 1)
+            and np.all(self.grid[y : y + height, x : x + width] != 2)
         ):
             # Täytä lattialla
-            self.grid[y : y + height, x : x + width] = 2
+            self.grid[y : y + height, x : x + width] = 3
 
             print("Huone rakennettu")
             return True
