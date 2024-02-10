@@ -9,11 +9,12 @@ class SimpleWavefuntioncollapse:
         self.grid = grid
         self.width, self.height = grid.shape
         self.entropy = np.zeros((self.height, self.width))
+        tile_count = len(adjacency_rules)
         self.neighbours = [
-            [[0, 0, 0, 0] for x in range(self.width)] for y in range(self.height)
+            [[0 for i in range(tile_count)] for x in range(self.width)] for y in range(self.height)
         ]
         self.allowed_options = [
-            [[True, True, True, True] for x in range(self.width)]
+            [[True for i in range(tile_count)] for x in range(self.width)]
             for y in range(self.height)
         ]
         self.adjacency_rules = adjacency_rules
@@ -46,8 +47,6 @@ class SimpleWavefuntioncollapse:
         """Funktio joka laskee entropian yhdelle laatalle"""
         x, y = coordinates
         neighbour_data = self.neighbours[y][x]
-        if (x, y) == (5, 8):
-            print(f'5,8 options: {self.allowed_options[y][x]}')
         if self.grid[y, x] != 0:
             self.entropy[y, x] = 0
             return 0
@@ -73,7 +72,7 @@ class SimpleWavefuntioncollapse:
             for neighbor in valid_neighbors:
                 xx, yy = neighbor
                 new_value = int(self.grid[yy, xx])
-                print(value)
+                # print(value)
                 self.neighbours[yy][xx][value - 1] += 1
                 # päivitä entropia, lähes aina käytössä, ellei aluesteta
                 if update_entropy is True:
@@ -94,14 +93,13 @@ class SimpleWavefuntioncollapse:
                 self.adjacency_rules[value - 1]
             ):
                 if int(neighbour_data[evaluated_tile]) == int(allowed_number_of_tile):
-                    print(f"x:{x} y:{y} not allowing neighbor: {evaluated_tile+1}")
-                    print(neighbour_data)
-                    print()
+                    # print(f"x:{x} y:{y} not allowing neighbor: {evaluated_tile+1}")
+                    # print(neighbour_data)
+                    # print()
                     # kiellä kaikilta naapureilta kyseinen tile
                     for neighbor in valid_neighbors:
                         xx, yy = neighbor
                         self.allowed_options[yy][xx][int(evaluated_tile)] = False
-                        print(self.allowed_options[yy][xx])
 
     def get_valid_neighbors(self, coordinates):
         x, y = coordinates

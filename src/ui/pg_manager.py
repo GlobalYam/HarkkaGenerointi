@@ -36,8 +36,8 @@ class PygameManager:
         for i in range(room_count):
             room_width = random.randrange(min_room, max_room)
             room_height = random.randrange(min_room, max_room)
-            x = random.randrange(1, level_width - room_width - 2)
-            y = random.randrange(1, level_height - room_height - 2)
+            x = random.randrange(2, level_width - room_width - 2)
+            y = random.randrange(2, level_height - room_height - 2)
             level.add_floor((x,y), room_height, room_width)
         
         return level
@@ -80,11 +80,15 @@ class PygameManager:
         #repeat the process
         if self.repeat:
             self.repeat = self.wfc_manager.step()
-            self.screen_updated = True
+            
             # harvoissa tilanteissa, entropiaa tulee pävittää globaalisti että konfilkti ratkeaa 
             if self.repeat is False:
                 self.wfc_manager.level_entropy()
                 self.repeat = self.wfc_manager.step()
+                if self.repeat is True:
+                    self.screen_updated = True
+            else:
+                self.screen_updated = True
 
 
         for event in pg.event.get():

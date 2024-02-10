@@ -41,7 +41,7 @@ class Level:
             # Täytä huone lattialla
             self.grid[y + 1 : y + height - 1, x + 1 : x + width - 1] = 3
 
-            print("Huone rakennettu")
+            # print("Huone rakennettu")
             return True
         else:
             print("Huonetta ei voi rakentaa")
@@ -61,7 +61,7 @@ class Level:
             # Täytä lattialla
             self.grid[y : y + height, x : x + width] = 3
 
-            print("Huone rakennettu")
+            # print("Huone rakennettu")
             return True
         else:
             print("Huonetta ei voi rakentaa")

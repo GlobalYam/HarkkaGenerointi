@@ -15,4 +15,4 @@ Lauantaina päivitin visuaalista esitystä ja selkeytin ohjelman rakennetta luet
 | ke  |            |                                       |
 | to  | 5          | wfc korjaamista testejä varten        |
 | pe  |            |                                       |
-| la  | 2          | testejä                               |
+| la  | 3          | Testien suunnittelu ja korjaus        |
