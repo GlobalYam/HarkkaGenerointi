@@ -36,6 +36,7 @@ class Wavefuntioncollapse:
         # print(f'self.entropy:\n {self.entropy}')
 
     def level_entropy(self):
+        """laskee entropian jokaiselle laatalle"""
         for y, row in enumerate(self.grid):
             for x, value in enumerate(row):
                 if value == 0:
@@ -78,6 +79,7 @@ class Wavefuntioncollapse:
                     self.tile_entropy((xx, yy))
 
     def rule_out_neighbours(self, coordinates, value):
+        """päivitä naapurien sallitut vaihtoehdot"""
         value = int(value)
         x, y = coordinates
         
@@ -100,6 +102,7 @@ class Wavefuntioncollapse:
                         self.allowed_options[yy][xx][int(evaluated_tile)] = False
 
     def get_valid_neighbors(self, coordinates):
+        """hae sallitut naapurit"""
         x, y = coordinates
 
         if 0 <= y < self.height and 0 <= x < self.width:
