@@ -10,3 +10,4 @@
 - [Raportti 3](dokumentaatio/raportit/raportti_3.md)
 - [Raportti 4](dokumentaatio/raportit/raportti_4.md)
 - [Raportti 5](dokumentaatio/raportit/raportti_5.md)
+- [Raportti 6](dokumentaatio/raportit/raportti_6.md)

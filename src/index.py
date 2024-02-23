@@ -23,4 +23,3 @@ running = True
 while running:
     game_manager.get_input()
     game_manager.update_screen()
-    
