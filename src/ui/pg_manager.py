@@ -90,42 +90,45 @@ class PygameManager:
             else:
                 self.screen_updated = True
 
-
         for event in pg.event.get():
             # QUIT
             if event.type == pg.QUIT:
                 sys.exit()
             if event.type == pg.KEYDOWN:
-                match event.key:
-                    case pg.K_q:
+                key=pg.key.name(event.key)
+
+                # print(key)
+
+                match key:
+                    case "q":
                         # QUIT
                         sys.exit()
 
-                    case pg.K_u:
+                    case "u":
                         # päivitä näyttö manuaalisesti
                         self.screen_updated = True
 
-                    case pg.K_e:
+                    case "e":
                         # visualisoi entropia
                         self.draw_screen_from_grid(self.wfc_manager.entropy)
 
-                    case pg.K_c:
+                    case "c":
                         # collapse entropy
                         print("collapse wave")
                         self.wfc_manager.step()
                         self.screen_updated = True
                     
-                    case pg.K_w:
+                    case "w":
                         # uudelleen laske tason entropioa (debug käyttöön)
                         self.wfc_manager.level_entropy()
                         self.draw_screen_from_grid(self.wfc_manager.entropy)
                     
-                    case pg.K_a:
+                    case "a":
                         # autocomplete - toteuta step wfclle kunnes valmis
                         self.repeat = True
-                            # self.update_screen(level_manager.grid)
+                        # self.update_screen(level_manager.grid)
                     
-                    case pg.K_r:
+                    case "r":
                         # resetoi taso
                         self.reset()
                         self.screen_updated = True
