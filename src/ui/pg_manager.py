@@ -3,7 +3,7 @@ import pygame as pg
 import sys
 import random
 from logic.level import Level
-from logic.wavefunctioncollapse import SimpleWavefuntioncollapse as swfc
+from logic.wfc import Wavefuntioncollapse as wfc
 
 
 class PygameManager:
@@ -23,7 +23,7 @@ class PygameManager:
     def reset(self):
         self.my_level = self.set_level((25, 25), 6, (3, 8))
 
-        self.wfc_manager = swfc(self.my_level.grid, self.adjacency_rules, self.my_level)
+        self.wfc_manager = wfc(self.my_level.grid, self.adjacency_rules)
         self.wfc_manager.initial_setup()
 
     def set_level(self, level_size, room_count, room_size_range):

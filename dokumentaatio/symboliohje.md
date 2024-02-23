@@ -14,3 +14,8 @@ Oletusasetuksilla numerot kuitenkin kuvaavat seuraavia stuktuureja videopelityyl
 2: Seinä.      4,3,4,2
 3. Lattia.     0,3,4,2
 4. Käytävä.    0,2,1,2
+
+Tilejä seuraavat numerot kertovat kuinka monta mitäkin naapuria kyseisellä laatalla saa olla.
+Esim Lattia-laatan vieressä saa olla 0 kallio palaa, 3 seinäpalaa, 4 lattiapalaa, ja 2 käytäväpalaa.
+Tämä tarkoittaa että lattialaatat voivat helposti kattaa laajan alueen, 
+kun taas käytäväpalat luovat tunnelimaisia raktenteita huoneiden välille. 

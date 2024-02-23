@@ -1,6 +1,6 @@
 import pygame as pg
 from logic.level import Level
-from logic.wavefunctioncollapse import SimpleWavefuntioncollapse as swfc
+from logic.wfc import Wavefuntioncollapse as wfc
 from ui.pg_manager import PygameManager
 
 

@@ -2,10 +2,10 @@ import numpy as np
 import random
 
 
-class SimpleWavefuntioncollapse:
+class Wavefuntioncollapse:
     """Luokka joka toteuttaa annetulle numpyarraylle yksinkertaisen wavefunctioncollapse algoritmin"""
 
-    def __init__(self, grid, adjacency_rules, level_manager) -> None:
+    def __init__(self, grid, adjacency_rules) -> None:
         self.grid = grid
         self.width, self.height = grid.shape
         self.entropy = np.zeros((self.height, self.width))
@@ -18,8 +18,6 @@ class SimpleWavefuntioncollapse:
             for y in range(self.height)
         ]
         self.adjacency_rules = adjacency_rules
-
-        self.level_manager = level_manager
 
     def initial_setup(self):
         """Funktio joka laskee entropian koko tasolle"""
