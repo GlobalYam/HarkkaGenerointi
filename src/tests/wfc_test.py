@@ -9,7 +9,7 @@ class TestWavefuntioncollapse(unittest.TestCase):
         
         self.test_floor_plan = Level(height, width)
 
-        self.test_floor_plan.add_floor((3, 3), 5, 5)
+        self.test_floor_plan.add_floor((3, 3), 3, 3)
         
         adjacency_rules = [
             [4,4,0,0],
@@ -32,7 +32,7 @@ class TestWavefuntioncollapse(unittest.TestCase):
         self.assertEqual(self.wfc_manager.tile_entropy(coords), 2)
     
     def test_entropy_is_zero(self):
-        coords = 7,7
+        coords = 0,0
         self.wfc_manager.initial_setup()
 
         self.assertEqual(self.wfc_manager.tile_entropy(coords), 0)
@@ -49,7 +49,27 @@ class TestWavefuntioncollapse(unittest.TestCase):
         self.wfc_manager.initial_setup()
         self.assertEqual(self.wfc_manager.tile_entropy(coords), 1)
 
-        self.wfc_manager.step()
+        compleation_status = self.wfc_manager.step()
 
         self.assertEqual(self.wfc_manager.tile_entropy(coords), 0)
+        self.assertEqual(compleation_status, True)
+
+
+        compleation_status = self.wfc_manager.step()
+        self.assertEqual(compleation_status, False)
+    
+    def test_build_room_and_floor_failed(self):
+        build_status = self.test_floor_plan.add_floor((0, 0), 7,8)
+        self.assertEqual(build_status, False)
+
+        build_status = self.test_floor_plan.add_floor((1, 1), 7,8)
+        self.assertEqual(build_status, True)
+
+        build_status = self.test_floor_plan.add_room((0, 0), 7,8)
+        self.assertEqual(build_status, False)
+
+        build_status = self.test_floor_plan.add_room((5, 5), 2,2)
+        self.assertEqual(build_status, False)
+
+
 
