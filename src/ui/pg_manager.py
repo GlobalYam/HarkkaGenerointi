@@ -17,7 +17,7 @@ class PygameManager:
 
         self.screen_updated = True
         self.repeat = False
-        
+
         self.reset()
 
     def reset(self):
@@ -38,8 +38,8 @@ class PygameManager:
             room_height = random.randrange(min_room, max_room)
             x = random.randrange(2, level_width - room_width - 2)
             y = random.randrange(2, level_height - room_height - 2)
-            level.add_floor((x,y), room_height, room_width)
-        
+            level.add_floor((x, y), room_height, room_width)
+
         return level
 
     def update_screen(self):
@@ -77,15 +77,17 @@ class PygameManager:
 
     def get_input(self):
 
-        #repeat the process
+        # repeat the process
         if self.repeat:
             self.repeat = self.wfc_manager.step()
-            
-            # harvoissa tilanteissa, entropiaa tulee pävittää globaalisti että konfilkti ratkeaa 
+
+            # harvoissa tilanteissa, entropiaa tulee pävittää globaalisti että konfilkti ratkeaa
             if self.repeat is False:
+                print("done perhaps")
                 self.wfc_manager.level_entropy()
                 self.repeat = self.wfc_manager.step()
                 if self.repeat is True:
+                    print("was infact not done")
                     self.screen_updated = True
             else:
                 self.screen_updated = True
@@ -95,9 +97,9 @@ class PygameManager:
             if event.type == pg.QUIT:
                 sys.exit()
             if event.type == pg.KEYDOWN:
-                key=pg.key.name(event.key)
+                key = pg.key.name(event.key)
 
-                # print(key)
+                print(key)
 
                 match key:
                     case "q":
@@ -117,21 +119,18 @@ class PygameManager:
                         print("collapse wave")
                         self.wfc_manager.step()
                         self.screen_updated = True
-                    
+
                     case "w":
                         # uudelleen laske tason entropioa (debug käyttöön)
                         self.wfc_manager.level_entropy()
                         self.draw_screen_from_grid(self.wfc_manager.entropy)
-                    
+
                     case "a":
                         # autocomplete - toteuta step wfclle kunnes valmis
                         self.repeat = True
                         # self.update_screen(level_manager.grid)
-                    
+
                     case "r":
                         # resetoi taso
                         self.reset()
                         self.screen_updated = True
-
-
-
