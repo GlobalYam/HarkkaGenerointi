@@ -22,6 +22,21 @@ class Level:
         self.grid[:, 0] = tile  # vasen
         self.grid[:, -1] = tile  # oieka
 
+        self.grid[0, self.width//2] = 4  # ylä
+        self.grid[-1, self.width//2] = 4  # ala
+        self.grid[self.height//2, 0] = 4  # vasen
+        self.grid[self.height//2, -1] = 4  # oieka
+
+        self.grid[0, self.width//2-1] = 2  # ylä
+        self.grid[-1, self.width//2-1] = 2  # ala
+        self.grid[self.height//2-1, 0] = 2  # vasen
+        self.grid[self.height//2-1, -1] = 2  # oieka
+
+        self.grid[0, self.width//2+1] = 2  # ylä
+        self.grid[-1, self.width//2+1] = 2  # ala
+        self.grid[self.height//2+1, 0] = 2  # vasen
+        self.grid[self.height//2+1, -1] = 2  # oieka
+
     def add_room(self, coordinates, height, width):
         """Funktio joka asettaa huoneen annettuihin kordinaatteihin jos se on sallittua"""
         x, y = coordinates
