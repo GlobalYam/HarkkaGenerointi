@@ -21,5 +21,4 @@ game_manager = PygameManager((SCREEN_W, SCREEN_H), adjacency_rules)
 
 running = True
 while running:
-    game_manager.get_input()
-    game_manager.update_screen()
+    game_manager.game_step()

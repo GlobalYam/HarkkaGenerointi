@@ -54,7 +54,6 @@ class TestWavefuntioncollapse(unittest.TestCase):
         self.assertEqual(self.wfc_manager.tile_entropy(coords), 0)
         self.assertEqual(compleation_status, True)
 
-
         compleation_status = self.wfc_manager.step()
         self.assertEqual(compleation_status, False)
     

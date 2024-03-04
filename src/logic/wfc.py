@@ -140,8 +140,8 @@ class Wavefuntioncollapse:
                 # tämä on hieman tehotonta, optimoidaan myöhemmin
                 for neighbor in self.get_valid_neighbors(tile):
                     self.tile_entropy(neighbor)
-                return False
-        return True
+                return True
+        return False
 
     def find_lowest_entropy(self):
         """funktio joka etsii gridistä matalimman entropian"""
