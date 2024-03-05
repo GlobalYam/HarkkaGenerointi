@@ -10,8 +10,8 @@ class NodeManager:
         self.chunk_list = [None]
         self.chunk_shape = chunk_shape
         self.chunk_grid = np.zeros((self.world_height, self.world_width))
-        self.current_x = 1
-        self.current_y = 1
+        self.current_x = 2
+        self.current_y = 2
         starting_coords = (self.current_x, self.current_y)
         self.starting_chunk = self.get_chunk_node(starting_coords, 0)
         self.current_chunk = self.starting_chunk
@@ -27,7 +27,7 @@ class NodeManager:
 
         node = Node(self.chunk_shape)
         self.chunk_list.append(node)
-        print(self.chunk_list[-1].my_level)
+
         node.coords = (x,y)
         
         if self.set_neighbors(coords, depth):

@@ -29,6 +29,8 @@ class PygameManager:
         self.chunk_relative_y = self.chunk_shape[0]//2
         self.render_distance = 1
         self.render_list = []
+        self.skip_every_other_frame = True
+        self.skip_frame = False
         self.reset()
 
     def reset(self):
@@ -72,6 +74,11 @@ class PygameManager:
     def update_screen(self):
         """päivittää näytön"""
         if self.screen_updated is True:
+
+            if self.skip_every_other_frame:
+                if self.skip_frame:
+                    self.skip_frame = False
+                    return
             self.screen_updated = False
 
             # Clear
@@ -79,7 +86,7 @@ class PygameManager:
             for chunk, relative_coords in self.render_list:
                 self.draw_chunk_node(chunk, relative_coords)
             # Piirrä pelaaja keskelle
-            self.draw_debug((self.chunk_relative_x, self.chunk_relative_y), (0,0), 4)
+            # self.draw_debug((self.chunk_relative_x, self.chunk_relative_y), (0,0), 4)
             # pg.draw.rect(
             # self.screen,
             # (2 * 30, 2 * 20, 2 * 10),
@@ -116,7 +123,6 @@ class PygameManager:
             topleft=(30, 40)
         )
         self.screen.blit(text, text_rect)
-        
 
     def draw_chunk_node(self, node, relative_coordinates):
         if node != None and node.my_level != None:
@@ -126,9 +132,9 @@ class PygameManager:
 
             self.draw_chunk_from_grid(draw_based_on, relative_coordinates)
         elif node != None:
-            self.draw_empty_chunk(1, relative_coordinates)
+            self.draw_empty_chunk(node.coords, relative_coordinates)
 
-    def draw_empty_chunk(self, number, relative_coordinates = (0,0)):
+    def draw_empty_chunk(self, coords, relative_coordinates = (0,0)):
         x_chunk_offset, y_chunk_offset = relative_coordinates
         
         height, width = self.chunk_shape
@@ -142,17 +148,18 @@ class PygameManager:
         offset_x += (x_chunk_offset*width*cell_size)-(self.chunk_relative_x*cell_size)
         offset_y += (y_chunk_offset*height*cell_size)-(self.chunk_relative_y*cell_size)
 
-        font = pg.font.Font(None, int(cell_size * 0.8))
+        font = pg.font.Font(None, int(cell_size * 8))
 
         # Piirä näytölle solut
+        number = coords[0]+coords[1]
         pg.draw.rect(
             self.screen,
             (number * 30, number * 30, number * 30),
-            (offset_x + (width*cell_size)/2, offset_y +(width*cell_size)/2, cell_size*height, cell_size*width),
+            (offset_x + (width*cell_size)//2 -cell_size//2, offset_y +(width*cell_size)//2-cell_size//2, cell_size*height, cell_size*width),
         )
-        text = font.render(str(int(number)), True, (255, 255, 255))
+        text = font.render(f'{(int(coords[0]), int(coords[1]))}', True, (255, 255, 255))
         text_rect = text.get_rect(
-            topleft=(offset_x + cell_size*(height // 2), offset_y + cell_size*height // 2)
+            center=(offset_x + cell_size*(height ), offset_y + cell_size*height)
         )
         self.screen.blit(text, text_rect)
 
@@ -218,9 +225,11 @@ class PygameManager:
                     temp_screen_updated = True
             elif not node.retired:
                 node.retired = True
-                for neighbor in self.chunk_manager.set_neighbors(node.coords, 2):
-                    self.node_setup(neighbor)
-                
+                if node == self.chunk_manager.current_chunk:
+                    self.update_render_list()
+                    for neighbor in self.chunk_manager.set_neighbors(node.coords, 1):
+                            self.node_setup(neighbor)
+                    
         if temp_screen_updated:
             self.screen_updated = True
 
@@ -231,6 +240,7 @@ class PygameManager:
             self.chunk_relative_x, self.chunk_relative_y = ((self.chunk_relative_x)%self.chunk_shape[1], (self.chunk_relative_y)%self.chunk_shape[0])
             self.chunk_manager.change_current_chunk(wrap)
             self.node_setup(self.chunk_manager.current_chunk)
+            self.chunk_manager.current_chunk.retired = False
             self.update_render_list()
 
     def get_input(self):
@@ -290,13 +300,13 @@ class PygameManager:
                         if self.zoom_level < 10:
                             self.zoom_level += 1
                             self.render_distance += 1
-                        self.update_render_list()
+                            self.update_render_list()
                     
                     case "x":
                         # zoom ulos
                         if self.zoom_level > 1:
                             self.zoom_level -= 1
                             self.render_distance -= 1
-                        self.update_render_list()
+                            self.update_render_list()
 
                 self.screen_updated = True

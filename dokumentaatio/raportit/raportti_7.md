@@ -16,5 +16,5 @@ Projekti vaatii vielä hieman hiomista ennen loppudemoa.
 | la  | 7          | node systeemi          |
 | su  |            |                        |
 | ma  | 5          | systeemin jatkokehitys |
-| ti  |            |                        |
+| ti  | 1          | ulkonäköviimeistely    |
 | ke  |            |                        |
