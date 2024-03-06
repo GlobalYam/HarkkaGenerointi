@@ -16,17 +16,19 @@ class PygameManager:
         self.screen_w, self.screen_h = screen_shape
         self.screen = pg.display.set_mode((self.screen_w, self.screen_h))
         self.adjacency_rules = adjacency_rules
+        self.screen_res_default = pg.display.get_window_size()
 
         self.screen_updated = True
+        self.fullscreen = False
         self.repeat = False
 
-        self.world_shape = (5,5)
-        self.chunk_shape = (25,25)
+        self.world_shape = (5, 5)
+        self.chunk_shape = (25, 25)
 
         self.zoom_level = 2
         self.draw_entropy = False
-        self.chunk_relative_x = self.chunk_shape[1]//2
-        self.chunk_relative_y = self.chunk_shape[0]//2
+        self.chunk_relative_x = self.chunk_shape[1] // 2
+        self.chunk_relative_y = self.chunk_shape[0] // 2
         self.render_distance = 1
         self.render_list = []
         self.skip_every_other_frame = True
@@ -45,7 +47,7 @@ class PygameManager:
 
     def node_setup(self, node):
         if node.generate or node.level_complete or node.retired:
-            return 
+            return
         node.my_level = self.set_level(self.chunk_shape, 6, (3, 8))
 
         node.wfc_manager = wfc(node.my_level.grid, self.adjacency_rules)
@@ -92,9 +94,9 @@ class PygameManager:
             # (2 * 30, 2 * 20, 2 * 10),
             # (1, 1, 10, 10),
             # )
-            
+
             pg.display.flip()
-    
+
     def draw_debug(self, coordinates, chunk_offset, entity_number):
         """piirtää olion annettuihin kordinaatteihin, erottaen oliot toisistaan numeroilla"""
         font = pg.font.Font(None, int(30))
@@ -110,18 +112,20 @@ class PygameManager:
             (self.screen_w, 1),
             (1, self.screen_h),
         )
-        text = font.render(f'x:{self.chunk_relative_x} y:{self.chunk_relative_y}', True, (255, 0, 0))
-
-        text_rect = text.get_rect(
-            topleft=(30, 10)
+        text = font.render(
+            f"x:{self.chunk_relative_x} y:{self.chunk_relative_y}", True, (255, 0, 0)
         )
+
+        text_rect = text.get_rect(topleft=(30, 10))
         self.screen.blit(text, text_rect)
 
-        text = font.render(f'x_chunk:{self.chunk_manager.current_x} y_chunk:{self.chunk_manager.current_y}', True, (255, 0, 0))
-
-        text_rect = text.get_rect(
-            topleft=(30, 40)
+        text = font.render(
+            f"x_chunk:{self.chunk_manager.current_x} y_chunk:{self.chunk_manager.current_y}",
+            True,
+            (255, 0, 0),
         )
+
+        text_rect = text.get_rect(topleft=(30, 40))
         self.screen.blit(text, text_rect)
 
     def draw_chunk_node(self, node, relative_coordinates):
@@ -134,49 +138,66 @@ class PygameManager:
         elif node != None:
             self.draw_empty_chunk(node.coords, relative_coordinates)
 
-    def draw_empty_chunk(self, coords, relative_coordinates = (0,0)):
+    def draw_empty_chunk(self, coords, relative_coordinates=(0, 0)):
         x_chunk_offset, y_chunk_offset = relative_coordinates
-        
+
         height, width = self.chunk_shape
-        cell_size = min(self.screen_h // height, self.screen_w // width) // self.zoom_level
+        cell_size = (
+            min(self.screen_h // height, self.screen_w // width) // self.zoom_level
+        )
 
         # offset näytön keskelle
         offset_x = (self.screen_w - width * cell_size) // 2
         offset_y = (self.screen_h - height * cell_size) // 2
 
         # offset suhteellisilla kordinaateilla
-        offset_x += (x_chunk_offset*width*cell_size)-(self.chunk_relative_x*cell_size)
-        offset_y += (y_chunk_offset*height*cell_size)-(self.chunk_relative_y*cell_size)
+        offset_x += (x_chunk_offset * width * cell_size) - (
+            self.chunk_relative_x * cell_size
+        )
+        offset_y += (y_chunk_offset * height * cell_size) - (
+            self.chunk_relative_y * cell_size
+        )
 
         font = pg.font.Font(None, int(cell_size * 8))
 
         # Piirä näytölle solut
-        number = coords[0]+coords[1]
+        number = (int(coords[0]) + int(coords[1])) / (self.world_shape[0] * 2)
         pg.draw.rect(
             self.screen,
-            (number * 30, number * 30, number * 30),
-            (offset_x + (width*cell_size)//2 -cell_size//2, offset_y +(width*cell_size)//2-cell_size//2, cell_size*height, cell_size*width),
+            (number * 225, number * 225, number * 225),
+            (
+                offset_x + (width * cell_size) // 2 - cell_size // 2,
+                offset_y + (width * cell_size) // 2 - cell_size // 2,
+                cell_size * height,
+                cell_size * width,
+            ),
         )
-        text = font.render(f'{(int(coords[0]), int(coords[1]))}', True, (255, 255, 255))
+        text = font.render(f"{(int(coords[0]), int(coords[1]))}", True, (255, 255, 255))
         text_rect = text.get_rect(
-            center=(offset_x + cell_size*(height ), offset_y + cell_size*height)
+            center=(offset_x + cell_size * (height), offset_y + cell_size * height)
         )
         self.screen.blit(text, text_rect)
 
-    def draw_chunk_from_grid(self, grid, relative_coordinates = (0,0)):
+    def draw_chunk_from_grid(self, grid, relative_coordinates=(0, 0)):
         """Funktio joka piirtää näytölle annetun gridin"""
         x_chunk_offset, y_chunk_offset = relative_coordinates
-        
+
         height, width = grid.shape
-        cell_size = min(self.screen_h // height, self.screen_w // width) // self.zoom_level
+        cell_size = (
+            min(self.screen_h // height, self.screen_w // width) // self.zoom_level
+        )
 
         # offset näytön keskelle
         offset_x = (self.screen_w - width * cell_size) // 2
         offset_y = (self.screen_h - height * cell_size) // 2
 
         # offset suhteellisilla kordinaateilla
-        offset_x += (x_chunk_offset*width*cell_size)-(self.chunk_relative_x*cell_size)
-        offset_y += (y_chunk_offset*height*cell_size)-(self.chunk_relative_y*cell_size)
+        offset_x += (x_chunk_offset * width * cell_size) - (
+            self.chunk_relative_x * cell_size
+        )
+        offset_y += (y_chunk_offset * height * cell_size) - (
+            self.chunk_relative_y * cell_size
+        )
 
         font = pg.font.Font(None, int(cell_size * 0.8))
 
@@ -196,7 +217,7 @@ class PygameManager:
                     center=(screen_x + cell_size // 2, screen_y + cell_size // 2)
                 )
                 self.screen.blit(text, text_rect)
-    
+
     def game_step(self):
         """Pyörittää yhden askeleen pelilogiikkaa, eli näppäimet, logiikka, ja näytönpäivitys"""
         self.get_input()
@@ -228,16 +249,22 @@ class PygameManager:
                 if node == self.chunk_manager.current_chunk:
                     self.update_render_list()
                     for neighbor in self.chunk_manager.set_neighbors(node.coords, 1):
-                            self.node_setup(neighbor)
-                    
+                        self.node_setup(neighbor)
+
         if temp_screen_updated:
             self.screen_updated = True
 
         # Wrappaa suhteelliset kordinaatit, ja siirrä nykyistä chunkkia
-        wrap = ((self.chunk_relative_x)//self.chunk_shape[1], (self.chunk_relative_y)//self.chunk_shape[0])
+        wrap = (
+            (self.chunk_relative_x) // self.chunk_shape[1],
+            (self.chunk_relative_y) // self.chunk_shape[0],
+        )
         # print(wrap)s
-        if wrap != (0,0):
-            self.chunk_relative_x, self.chunk_relative_y = ((self.chunk_relative_x)%self.chunk_shape[1], (self.chunk_relative_y)%self.chunk_shape[0])
+        if wrap != (0, 0):
+            self.chunk_relative_x, self.chunk_relative_y = (
+                (self.chunk_relative_x) % self.chunk_shape[1],
+                (self.chunk_relative_y) % self.chunk_shape[0],
+            )
             self.chunk_manager.change_current_chunk(wrap)
             self.node_setup(self.chunk_manager.current_chunk)
             self.chunk_manager.current_chunk.retired = False
@@ -282,7 +309,7 @@ class PygameManager:
                     case "a":
                         # liiku vasemmalle
                         self.chunk_relative_x -= 25
-                    
+
                     case "s":
                         # liiku alas
                         self.chunk_relative_y += 25
@@ -294,14 +321,30 @@ class PygameManager:
                     case "r":
                         # resetoi taso
                         self.reset()
-                    
+
+                    # case "f":
+                    #     # fullscreen
+                    #     self.screen_updated = True
+                    #     if self.fullscreen is False:
+                    #         pg.display.set_mode((0, 0), pg.FULLSCREEN)
+                    #         self.screen_res_current = pg.display.get_window_size()
+                    #         self.screen_h, self.screen_w = self.screen_res_current
+                    #         self.fullscreen = True
+                    #     else:
+                    #         self.screen_res_current = self.screen_res_default
+                    #         self.screen_h, self.screen_w = self.screen_res_current
+                    #         self.display_surf = pg.display.set_mode(
+                    #             self.screen_res_current
+                    #         )
+                    #         self.fullscreen = False
+
                     case "z":
                         # zoom sisään
                         if self.zoom_level < 10:
                             self.zoom_level += 1
                             self.render_distance += 1
                             self.update_render_list()
-                    
+
                     case "x":
                         # zoom ulos
                         if self.zoom_level > 1:
